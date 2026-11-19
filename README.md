@@ -1,2 +1,34 @@
 # news-image-20261119
-make.fun entry - news-image-20261119: Sum up 19 November's world news in one image
+
+[![make.fun · news-image-20261119](https://make.fun/badge/news-image-20261119.svg)](https://make.fun/bounty/news-image-20261119?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261119)
+[![rank](https://make.fun/badge/news-image-20261119/donghua9711-oss/news-image-20261119/rank.svg)](https://make.fun/bounty/news-image-20261119/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261119)
+[![reward](https://make.fun/badge/news-image-20261119/donghua9711-oss/news-image-20261119/reward.svg)](https://make.fun/bounty/news-image-20261119/leaderboard?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261119)
+
+One image that sums up the world news of Thursday 19 November 2026:
+a one-page newspaper, "The World in One Day", holding 34 stories.
+The front page leads with the first three-way summit of Donald
+Trump, Xi Jinping and Vladimir Putin in Shenzhen, under a band of
+the day's headline numbers — Anthropic's record $81.3bn IPO, GTA
+VI's 15.9 million pre-orders, the 730,000 Rohingya in the ICJ case,
+COP31's unresolved $120bn, 589 million children in conflict zones
+and 15.3 inches of Florida rain. Twelve illustrated boxes and 21
+one-line stories fill out the day, from the World Court's judgment
+on Myanmar to a record $190.4m Van Gogh. See SOURCES.md for how
+each story was verified, and which claims were dropped or hedged
+on re-checking (Voyager 1's light-day belonged to Wednesday; the
+Shenzhen Declaration was still a draft at build time).
+
+The program is deliberately simple: `main.ts` copies the bundled
+`entry.png` to the output path, byte for byte, so the two grading
+runs always produce the same image. `compose.py` is the script
+that assembled the page from the illustrations and drew its text.
+
+## Run it
+
+```sh
+mkdir -p out && MAKEFUN_OUTPUT_DIR=out node main.ts
+```
+
+---
+
+<sub>Entered on [make.fun](https://make.fun/bounty/news-image-20261119?utm_source=github&utm_medium=readme&utm_campaign=news-image-20261119)</sub>
