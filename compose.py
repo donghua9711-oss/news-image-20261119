@@ -40,6 +40,9 @@ CONTENT_W = PAGE - 2 * MARGIN  # 976
 PAPER = (246, 241, 228)
 INK = (27, 26, 23)
 FADED = (92, 87, 76)
+STAT_LABEL = (70, 65, 56)  # darker than FADED: stat captions sit at
+# 9pt, where FADED's contrast on cream gets thin; this keeps them
+# clearly readable without shouting over the numbers above them.
 HAIRLINE = (168, 160, 144)
 RED = (158, 27, 27)
 NAVY = (22, 50, 74)
@@ -353,7 +356,7 @@ def build_page():
         for ln in lab:
             lw = draw.textlength(ln, font=f_lab)
             draw.text((x + (col_w - lw) / 2, ly), ln,
-                      font=f_lab, fill=FADED)
+                      font=f_lab, fill=STAT_LABEL)
             ly += 11
         if i:
             draw.line([x, band_y + 9, x, band_y + 70],
@@ -425,6 +428,14 @@ def build_page():
             draw.text((bx, sy2), ln, font=f_bs, fill=INK)
             sy2 += 12.3
         assert sy2 <= by + box_h, f"box overflow: {box['headline']} -> {sy2}"
+    # Thin vertical rules between the box columns: with only a 12px
+    # gutter the four columns run together at a glance, and rules
+    # are the classic newspaper fix for that.
+    for c in range(1, 4):
+        vx = MARGIN + c * (box_w + gap) - gap // 2
+        draw.line([vx, grid_y - 5, vx,
+                   grid_y + 3 * box_h + 2 * row_gap],
+                  fill=HAIRLINE, width=1)
     grid_bottom = grid_y + 3 * box_h + 2 * row_gap
 
     # ---- also on thursday ------------------------------------------
@@ -450,6 +461,11 @@ def build_page():
         assert len(one) == 1, f"also item wraps: {item}"
         draw.text((x + nw2, y), one[0], font=f_item, fill=INK)
     items_bottom = items_y + per_col * row_h
+    # A hairline down the middle of the ALSO columns keeps the two
+    # numbered runs from bleeding into each other at reading speed.
+    mid_x = MARGIN + col2_w + 12
+    draw.line([mid_x, items_y, mid_x, items_bottom - 4],
+              fill=HAIRLINE, width=1)
 
     # ---- date check + sources strip ---------------------------------
     strip_y = items_bottom + 4

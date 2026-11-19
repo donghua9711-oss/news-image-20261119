@@ -41,4 +41,25 @@ if (!isPng && !isJpeg) {
   throw new Error("copied file is neither PNG nor JPEG");
 }
 
+// The image gate also fixes the canvas at 1024x1024. A PNG carries
+// its dimensions in the IHDR chunk: width and height are big-endian
+// uint32s at byte offsets 16 and 20. Verify them here so a wrongly
+// sized bundle fails at copy time, not at grading.
+if (isPng) {
+  const ihdr = readFileSync(targetPath).subarray(16, 24);
+  const width = ihdr.readUInt32BE(0);
+  const height = ihdr.readUInt32BE(4);
+  if (width !== 1024 || height !== 1024) {
+    throw new Error(`PNG is ${width}x${height}, expected 1024x1024`);
+  }
+}
+
+// The gate's other hard limit is the file size: at most 1,048,576
+// bytes (1 MiB). The size comparison above only proves the copy is
+// complete, not that the bundle is legal, so check the cap itself.
+const MAX_BYTES = 1_048_576;
+if (written > MAX_BYTES) {
+  throw new Error(`entry image is ${written} bytes, over the ${MAX_BYTES} cap`);
+}
+
 console.log(`entry.png: ${written} bytes, ${isPng ? "PNG" : "JPEG"}`);
