@@ -22,8 +22,14 @@ Page plan, on a 1024x1024 cream sheet, top to bottom:
              kept as the lead image
   regions    stories 2-28 grouped under colour bands - ASIA,
              EUROPE, AMERICAS, MIDDLE EAST - each band holding
-             illustrated or text boxes (big numeral, headline,
-             short brief, source tag) and its one-line stories
+             illustrated or text boxes and its one-line stories.
+             An illustrated box sets its artwork at the left in
+             a true rectangle of about 4:3 - a complete picture,
+             never a wide slice of one - cropped on a focal
+             window chosen per picture (CROPS below) so the
+             subject reads whole, with the story's number, source
+             tag, headline and short brief in a text column
+             beside the art
   bottom     WHERE IT HAPPENED, a dot-matrix world map with the
              13 main stories pinned by number, beside the AFRICA,
              OCEANIA and GLOBAL bands (stories 29-34)
@@ -106,6 +112,30 @@ TIMELINE = [
     ("11:15", "2.3m watch GTA VI streams", 11.25),
     ("14:30", "Anthropic trades as ANT", 14.5),
 ]
+
+# Focal crop windows for the story artwork, in source pixels.
+# The illustrations were drawn as wide panoramas (mostly
+# 2640x864); shown whole in a box of about 4:3 they would have to
+# be sliced, so each window is chosen on the picture's subject -
+# the crowd and the mosque in Dhaka, the towers at Yongbyon, the
+# painting at the Van Gogh sale - and the box then shows that
+# window complete, at the box's own ratio. Windows for the
+# three-across boxes are cut at 146:108; the four-across
+# AMERICAS boxes are a little narrower, at 118:106.
+CROPS = {
+    "illo-bangladesh.png": (646, 0, 1814, 864),
+    "illo-northkorea.png": (976, 0, 2144, 864),
+    "illo-icj.png": (736, 0, 1904, 864),
+    "illo-kerch.png": (95, 0, 1825, 1280),
+    "illo-europe.png": (656, 0, 1824, 864),
+    "illo-gta.png": (699, 0, 1661, 864),
+    "illo-anthropic.png": (819, 0, 1781, 864),
+    "illo-vangogh.png": (1219, 0, 2181, 864),
+    "illo-florida.png": (469, 0, 1431, 864),
+    "illo-cop31.png": (916, 0, 2084, 864),
+    "illo-gulf.png": (666, 0, 1834, 864),
+    "illo-gaza.png": (916, 0, 2084, 864),
+}
 
 # A story is a dict: n (its number in reading order), and either a
 # box (head, brief, tag, optional img) or a one-line story (line).
@@ -462,10 +492,10 @@ def draw_masthead(draw):
     f_title = shrink_to_fit(draw, title, SERIF_BLACK, CONTENT_W, 34)
     centered(draw, 35, title, f_title, INK)
     f_deck = shrink_to_fit(draw, DECK, SERIF_IT, CONTENT_W, 13)
-    centered(draw, 76, DECK, f_deck, FADED)
-    draw.line([MARGIN, 92, PAGE - MARGIN, 92], fill=INK, width=1)
-    draw.rectangle([MARGIN, 95, PAGE - MARGIN, 97], fill=INK)
-    return 102
+    centered(draw, 73, DECK, f_deck, FADED)
+    draw.line([MARGIN, 89, PAGE - MARGIN, 89], fill=INK, width=1)
+    draw.rectangle([MARGIN, 92, PAGE - MARGIN, 94], fill=INK)
+    return 99
 
 
 def draw_timeline(draw, y):
@@ -475,7 +505,7 @@ def draw_timeline(draw, y):
     f_note = F(SANS_BOLD, 8)
     nw = tracked_w(draw, note, f_note, 2)
     draw_tracked(draw, PAGE - MARGIN - nw, y, note, f_note, FADED, 2)
-    axis_y = y + 23
+    axis_y = y + 21
     draw.line([MARGIN, axis_y, PAGE - MARGIN, axis_y],
               fill=HAIRLINE, width=1)
     f_hour = F(SANS, 7)
@@ -492,7 +522,7 @@ def draw_timeline(draw, y):
     for (time, text, hour), frac in zip(TIMELINE, slots):
         dot_x = MARGIN + hour / 24 * CONTENT_W
         slot_x = MARGIN + frac * CONTENT_W
-        draw.line([slot_x, y + 21, dot_x, axis_y - 3],
+        draw.line([slot_x, y + 19, dot_x, axis_y - 3],
                   fill=HAIRLINE, width=1)
         draw.ellipse([dot_x - 2.5, axis_y - 2.5, dot_x + 2.5,
                       axis_y + 2.5], fill=RED)
@@ -500,7 +530,7 @@ def draw_timeline(draw, y):
         lw = draw.textlength(label, font=f_mom)
         draw.text((slot_x - lw / 2, y + 10), label, font=f_mom,
                   fill=INK)
-    return axis_y + 10
+    return axis_y + 9
 
 
 def draw_lead(page, draw, y):
@@ -522,7 +552,7 @@ def draw_lead(page, draw, y):
     hy = y + 18
     for ln in head:
         draw.text((tx, hy), ln, font=f_head, fill=INK)
-        hy += 29
+        hy += 28
     draw.line([tx, hy + 2, PAGE - MARGIN, hy + 2], fill=HAIRLINE,
               width=1)
     f_sum = F(SANS, 11.5)
@@ -531,7 +561,7 @@ def draw_lead(page, draw, y):
     sy = hy + 8
     for ln in body:
         draw.text((tx, sy), ln, font=f_sum, fill=INK)
-        sy += 13
+        sy += 12.5
     return int(round(max(y + img_h + 14, sy)))
 
 
@@ -549,25 +579,48 @@ def draw_band(draw, y, name, count, color, places=None):
     return y + 17
 
 
-def draw_box(page, draw, x, y, w, box, color, art_h):
+def draw_box(page, draw, x, y, w, box, color, art_w, art_h):
     """One numbered story box; returns its height. The artwork
-    runs the full width of the box at the top, at about the size
-    the first edition's boxes used; a box with no artwork gets a
-    coloured rule instead. Under it: the story's number and its
-    source tag, the headline, and a two-to-three-line brief."""
+    sits at the left in a true rectangle of about 4:3, cropped
+    on its focal window (CROPS) so the picture reads complete,
+    never as a slice; the story's number and source tag, its
+    headline and its brief run in a text column beside the art.
+    A box with no artwork gets a coloured rule and the full
+    width for its text instead."""
     f_num = F(SANS_BOLD, 13)
     f_tag = F(SANS_BOLD, 7)
     f_head = F(SERIF_BOLD, 13)
     f_brief = F(SANS, 9.5)
     if box["img"]:
-        art = make_thumb(os.path.join(ASSETS, box["img"]), w, art_h)
+        art = make_thumb(os.path.join(ASSETS, box["img"]), art_w,
+                         art_h, crop=CROPS[box["img"]])
         page.paste(art, (x, y))
-        draw.rectangle([x, y, x + w, y + art_h], outline=HAIRLINE,
-                       width=1)
-        ty = y + art_h + 3
-    else:
-        draw.rectangle([x, y, x + w, y + 3], fill=color)
-        ty = y + 7
+        draw.rectangle([x, y, x + art_w, y + art_h],
+                       outline=HAIRLINE, width=1)
+        tx = x + art_w + 8
+        tw = x + w - tx
+        draw.text((tx, y), str(box["n"]), font=f_num, fill=color)
+        tag = box["tag"]
+        tagw = tracked_w(draw, tag, f_tag, 1)
+        draw_tracked(draw, x + w - tagw, y + 3, tag, f_tag,
+                     FADED, 1)
+        head = wrap_lines(draw, box["head"], f_head, tw)
+        assert len(head) <= 3, \
+            f"box headline overflow: {box['head']}"
+        hy = y + 15
+        for ln in head:
+            draw.text((tx, hy), ln, font=f_head, fill=INK)
+            hy += 13.5
+        brief = wrap_lines(draw, box["brief"], f_brief, tw)
+        assert len(brief) <= 5, \
+            f"box brief overflow: {box['head']}"
+        by = hy + 1
+        for ln in brief:
+            draw.text((tx, by), ln, font=f_brief, fill=INK)
+            by += 10
+        return int(round(max(art_h, by - y)))
+    draw.rectangle([x, y, x + w, y + 3], fill=color)
+    ty = y + 7
     draw.text((x, ty), str(box["n"]), font=f_num, fill=color)
     tag = box["tag"]
     tagw = tracked_w(draw, tag, f_tag, 1)
@@ -611,27 +664,27 @@ def draw_lines(draw, x, y, w, lines, color, cols, fsize=11.5,
 
 def draw_region(page, draw, y, region):
     y = draw_band(draw, y, region["name"], region["count"],
-                  region["color"], region["places"]) + 3
+                  region["color"], region["places"]) + 2
     boxes = region["boxes"]
     n = len(boxes)
     gap = 11 if n == 3 else 12
     bw = (CONTENT_W - (n - 1) * gap) // n
-    art_h = 44 if n == 3 else 42
+    art_w, art_h = (146, 108) if n == 3 else (118, 106)
     row_h = 0
     for i, box in enumerate(boxes):
         bx = MARGIN + i * (bw + gap)
         row_h = max(row_h, draw_box(page, draw, bx, y, bw, box,
-                                    region["color"], art_h))
+                                    region["color"], art_w, art_h))
     y += row_h
     if region["lines"]:
         y += 3
         y = draw_lines(draw, MARGIN, y, CONTENT_W, region["lines"],
-                       region["color"], 2)
+                       region["color"], 2, lh=12.5)
     return y
 
 
 def draw_bottom(page, draw, y):
-    map_w, map_h = 470, 100
+    map_w, map_h = 470, 94
     draw_tracked(draw, MARGIN, y, "WHERE IT HAPPENED",
                  F(SANS_BOLD, 10), INK, 2)
     cap = "the 13 main stories, pinned"
@@ -645,15 +698,15 @@ def draw_bottom(page, draw, y):
     sw = PAGE - MARGIN - sx
     sy = y
     for region in SMALL_REGIONS:
-        draw.rectangle([sx, sy, sx + sw, sy + 13],
+        draw.rectangle([sx, sy, sx + sw, sy + 12],
                        fill=region["color"])
         label = (f"{region['name']} — {region['count']} "
                  + ("STORY" if region["count"] == 1 else "STORIES"))
-        draw_tracked(draw, sx + 7, sy + 1.5, label, F(SANS_BOLD, 8.5),
+        draw_tracked(draw, sx + 7, sy + 1, label, F(SANS_BOLD, 8.5),
                      WHITE, 1)
-        sy += 13 + 2
+        sy += 12 + 2
         sy = draw_lines(draw, sx, sy, sw, region["lines"],
-                        region["color"], 1, fsize=11, lh=12) - 2
+                        region["color"], 1, fsize=11, lh=11.5) - 2
         sy += 4
     return int(round(max(left_bottom, sy - 4)))
 
@@ -676,11 +729,11 @@ def build_page():
     y = draw_timeline(draw, y + 2) + 2
     y = draw_lead(page, draw, y)
     for region in REGIONS:
-        y += 4
+        y += 3
         y = draw_region(page, draw, y, region)
-    y += 6
-    y = draw_bottom(page, draw, y)
     y += 5
+    y = draw_bottom(page, draw, y)
+    y += 4
     y = draw_footer(draw, y)
     assert y <= PAGE - 2, f"page overflow: content ends at {y}"
     return page
