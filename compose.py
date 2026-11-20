@@ -3,54 +3,59 @@
 "The World in One Day" for Thursday 19 November 2026, holding
 the same 34 verified stories as the first edition of the page.
 
-This revision answers the reader feedback on the last two
-previews, in the order it was given. The president picture -
-the APEC cover drawn for the 18 November edition - is now a
-real hero: the full three-leaders scene scaled whole at 676
-pixels wide beside the lead headline, not a faces strip. The
-other story pictures are longer: the first region's stories
-sit in art-on-top cards (the arrangement of the
-edition-winning pages), their panoramas shown whole at a
-ratio near the panoramas' own on focal windows, and the
-remaining regions run their art beside the text in taller
-rectangles than before - so no picture is a sliced banner
-and none is a thumbnail either. The grid is the winning
-one: a cream sheet, a slim masthead, a timeline of the day in
-UTC, one wide lead, the stories grouped under regional colour
-bands with big numerals, a dot-matrix world map with the main
-stories pinned, and type kept large enough to read at
-thumbnail size, which is how the judge compares entries.
+This revision rebuilds the page on the structure of the
+edition's winning pages, as the reader directed: mirror that
+structure faithfully, adapted to our own Thursday content and
+our own artwork. Nothing here is copied from another entry -
+the stories are the 34 verified for this page (SOURCES.md),
+the illustrations are the pool drawn for our two editions,
+re-cropped to the card shapes on per-picture focal windows,
+and the words are set here in PIL.
 
-Page plan, on a 1024x1024 cream sheet, top to bottom:
-  masthead   the paper's name, the date as headline, a deck
-             line carrying three of the day's headline numbers
-  timeline   THE DAY IN UTC: four timed moments on a 24-hour
-             axis
-  lead       story 1 - the first Trump-Xi-Putin three-way
-             summit in Shenzhen, with the APEC cover
-             illustration (assets/hero-apec.png) at hero size
-  regions    stories 2-28 grouped under colour bands - ASIA,
-             EUROPE, AMERICAS, MIDDLE EAST - each band holding
-             its story boxes and its one-line stories. ASIA's
-             cards set their artwork on top at a ratio near
-             the panorama's own, cropped on a focal window
-             chosen per picture (FOCAL below) so the subject
-             reads whole, with the story's number, source tag,
-             headline and short brief under the art; the other
-             regions set their artwork beside the text in a
-             taller rectangle, cropped on its focal window
-             (CROPS below), with the text in a column alongside
-  bottom     WHERE IT HAPPENED, a dot-matrix world map with
-             the 13 main stories pinned by number, beside the
-             AFRICA, OCEANIA and GLOBAL bands (stories 29-34)
-  strip      the DATE CHECK line and the sources line in one
-             box
+Page plan, on a 1024x1024 sheet, top to bottom:
+  masthead   a navy band: a red-and-white date badge at the
+             left (NOV / 19 / THU - 2026), the paper's name in
+             small caps, the date itself in huge white serif,
+             an italic standfirst, and the page's counts at
+             the top right (34 STORIES - 7 REGIONS - 11
+             DRAWN - ONE PAGE)
+  rainbow    one band of seven coloured segments, one per
+             region, each carrying its story count
+  timeline   THE DAY IN UTC: a label box and four moment
+             boxes with the day's grounded times
+  lead row   three cards with their artwork on top at about
+             2:1 - the Shenzhen summit under the APEC
+             presidents cover (the reader's non-negotiable
+             hero, large at last), GTA VI's launch, and
+             Anthropic's record IPO debut
+  card rows  two rows of four cards, artwork on top at 2:1,
+             numbered, headline and short brief: the World
+             Court judgment, the Crimean Bridge strike,
+             Europe in Berlin, the Van Gogh record, flooded
+             Florida, COP31's final hours, Kuwait's repelled
+             attack and Gaza's Yellow Line - eleven drawn
+             stories in all
+  bottom     WHERE IT HAPPENED at the left: the dot-matrix
+             world map, the eleven drawn stories pinned by
+             number, dots for the briefs, and the region
+             legend; at the right, ALSO ON THURSDAY 19
+             NOVEMBER - the remaining 23 stories as numbered
+             one-liners in three columns, each with a bold
+             lead word, wire-style and terse so the type can
+             stay large
+  footer     the red DATE CHECK strip and the sources line
+
+The page is built to be read at thumbnail, half and full
+size, which is how the judge compares entries: headlines
+are big, briefs and one-liners keep their type floors, and
+no picture is a sliced banner - every card shows its scene
+whole on its focal window.
 
 Stories are numbered in reading order, 1 to 34. All wording
 is set here in PIL from the story data below; the
-illustrations are text-free artwork, so no lettering can come
-out garbled. SOURCES.md is the verification record behind
-every line.
+illustrations are text-free artwork, so no lettering can
+come out garbled. SOURCES.md is the verification record
+behind every line.
 
 Output is entry.png beside this file. If the PNG ever
 exceeded the 1,048,576-byte gate the script falls back to
@@ -72,17 +77,16 @@ MARGIN = 24
 CONTENT_W = PAGE - 2 * MARGIN  # 976
 
 # ------------------------------------------------------------ knobs
-# The geometry the reader feedback set: a hero-sized lead and
-# longer story pictures on a fixed 1024x1024 page. HERO_W and
-# HERO_H size the APEC cover; ART_H / ART4_H are the art
-# heights of the art-on-top cards in the three-across and
-# four-across rows; SIDE_H is the art height where a row runs
-# its boxes with the art beside the text instead.
-HERO_W, HERO_H = 676, 156
-ART_H = 96
-ART4_H = 96
-SIDE_H = 106
-MAP_H = 78
+# The geometry of the mirrored structure: a full-bleed navy
+# masthead and rainbow band, then the body in three card rows
+# at about 2:1 art, a map-and-briefs bottom zone and the
+# footer strip.
+MASTHEAD_H = 96
+RAINBOW_H = 17
+TIMELINE_H = 38
+LEAD_ART_H = 150
+CARD_ART_H = 112
+MAP_W, MAP_H = 300, 94
 
 PAPER = (247, 242, 231)
 INK = (27, 26, 23)
@@ -90,6 +94,7 @@ FADED = (92, 87, 76)
 HAIRLINE = (176, 168, 150)
 MAPDOT = (158, 149, 128)
 WHITE = (252, 250, 244)
+NAVY_TXT = (206, 200, 182)
 
 RED = (176, 32, 40)
 NAVY = (22, 50, 74)
@@ -107,57 +112,46 @@ SANS_BOLD = "/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf"
 
 # ------------------------------------------------------------- the day
 
-DECK = ("$81.3bn IPO · 15.9m GTA VI pre-orders · "
-        "589m children in conflict zones")
+STANDFAST = ("Everything on this page happened, or was first "
+             "reported, on Thursday 19 November 2026.")
 
-LEAD = {
-    "n": 1,
-    "kicker": "1 · SHENZHEN · ASIA · THE SUMMIT",
-    "headline": "Trump, Xi and Putin hold first three-way summit",
-    "summary": (
-        "The leaders of the United States, China and Russia sat down "
-        "together in Shenzhen on Thursday for an hour of talks "
-        "spanning Ukraine, Iran, nuclear arms, trade and AI. Trump "
-        "also met each man separately beforehand; no breakthrough "
-        "was announced."
-    ),
-    "credit": "Cover: the three leaders in Shenzhen. "
-              "Original illustration.",
-    "image": "hero-apec.png",
-}
+COUNTS_LINE = "34 STORIES · 7 REGIONS · 11 DRAWN · ONE PAGE"
 
-# The hero window: the cover is a square scene (the APEC banner
-# above, the three leaders below). The window keeps the leaders
-# and the flags at the hero's own ratio, centred on the faces
-# (source y about 840), the full width of the scene less a
-# small trim at the edges - the picture scaled whole, never
-# stretched.
-def hero_window(w, h):
-    src_w = 1520
-    src_h = round(src_w * h / w)
-    return (40, 840 - src_h // 2, 40 + src_w, 840 + src_h // 2)
-
+# The rainbow band, in reading order, with the story counts
+# recounted from the final numbering: Asia holds the summit
+# and nine briefs; Europe its three cards; the Americas two
+# lead cards, two cards and four briefs; the Middle East
+# three cards and four briefs; Africa, Oceania and Global
+# their briefs.
+REGION_BAND = [
+    ("ASIA", 10, RED),
+    ("EUROPE", 3, NAVY),
+    ("AMERICAS", 8, PLUM),
+    ("MIDDLE EAST", 7, TEAL),
+    ("AFRICA", 1, GOLD),
+    ("OCEANIA", 1, GREEN),
+    ("GLOBAL", 4, GRAY),
+]
 
 # The day in UTC. Times and labels are from SOURCES.md: the
 # Xi-Trump meeting at 12:45 Shenzhen time (04:45 UTC), the
-# three-way at 15:30 Shenzhen (07:30 UTC), 2.3m Twitch viewers by
-# 12:15 Paris time (11:15 UTC), and Nasdaq's 14:30 UTC open for
-# Anthropic's first trades as ANT.
+# three-way at 15:30 Shenzhen (07:30 UTC), 2.3m Twitch viewers
+# by 12:15 Paris time (11:15 UTC), and Nasdaq's 14:30 UTC open
+# for Anthropic's first trades as ANT.
 TIMELINE = [
-    ("04:45", "Trump meets Xi in Shenzhen", 4.75),
-    ("07:30", "Three-way summit opens", 7.5),
-    ("11:15", "2.3m watch GTA VI streams", 11.25),
-    ("14:30", "Anthropic trades as ANT", 14.5),
+    ("04:45", "Trump meets Xi in Shenzhen"),
+    ("07:30", "Three-way summit opens"),
+    ("11:15", "2.3m watch GTA VI streams"),
+    ("14:30", "Anthropic trades as ANT"),
 ]
 
 # Focal centres for the story artwork, as a fraction of each
 # panorama's width. The illustrations were drawn as wide
-# panoramas (mostly 2640x864, ratio about 3.06:1). An art-on-top
-# card shows the panorama at a ratio near its own on a window
-# centred on the picture's subject - the crowd and the mosque
-# in Dhaka, the towers at Yongbyon, the painting at the Van
-# Gogh sale - so the picture reads complete, never as a slice
-# cut out of a taller scene.
+# panoramas (mostly 2640x864, ratio about 3.06:1). A card
+# shows a 2:1 window centred on the picture's subject - the
+# crowd and the mosque in Dhaka, the towers at Yongbyon, the
+# painting at the Van Gogh sale - so the picture reads
+# complete, never as a slice cut out of a taller scene.
 FOCAL = {
     "illo-bangladesh.png": 0.466,
     "illo-northkorea.png": 0.591,
@@ -173,172 +167,116 @@ FOCAL = {
     "illo-gaza.png": 0.548,
 }
 
-# Focal crop windows for the beside-text boxes, in source
-# pixels, kept from the previous revision for any row that
-# runs its art beside the text.
-CROPS = {
-    "illo-bangladesh.png": (646, 0, 1814, 864),
-    "illo-northkorea.png": (976, 0, 2144, 864),
-    "illo-icj.png": (736, 0, 1904, 864),
-    "illo-kerch.png": (95, 0, 1825, 1280),
-    "illo-europe.png": (656, 0, 1824, 864),
-    "illo-gta.png": (699, 0, 1661, 864),
-    "illo-anthropic.png": (819, 0, 1781, 864),
-    "illo-vangogh.png": (1219, 0, 2181, 864),
-    "illo-florida.png": (469, 0, 1431, 864),
-    "illo-cop31.png": (916, 0, 2084, 864),
-    "illo-gulf.png": (666, 0, 1834, 864),
-    "illo-gaza.png": (916, 0, 2084, 864),
-}
+# The hero window for the lead card: the APEC cover is a
+# square scene (the APEC banner above, the three leaders
+# below). The card's 2:1 window takes the scene's full width
+# less a small trim, centred on the leaders (source y about
+# 840), so the presidents and their flags read whole and
+# large - the picture scaled, never stretched.
+HERO_CROP = (40, 450, 1560, 1164)
 
-# A story is a dict: n (its number in reading order), and either a
-# box (head, brief, tag, optional img) or a one-line story (line).
-# A region's "mode" says how its boxes run: "top" sets the art
-# on top of the text, "side" sets it beside the text.
-REGIONS = [
-    {
-        "name": "ASIA", "count": 10, "color": RED, "mode": "top",
-        "places": "SHENZHEN · DHAKA · YONGBYON",
-        "boxes": [
-            {"n": 2, "img": "illo-bangladesh.png", "tag": "HORIZON",
-             "head": "Bangladesh sinks into turmoil",
-             "brief": "Yunus's ancestral home was set ablaze and "
-                      "violence hit 28 districts, as backers of the "
-                      "death-sentenced Hasina protest."},
-            {"n": 3, "img": "illo-northkorea.png", "tag": "ONE TURN",
-             "head": "North Korea expands uranium work",
-             "brief": "The UN watchdog reports expanded uranium "
-                      "enrichment at Yongbyon, the North's main "
-                      "nuclear complex."},
-            {"n": 4, "img": None, "tag": "TASS · THE EDGE",
-             "head": "APEC winds up in Shenzhen",
-             "brief": "Leaders close the summit week and Putin "
-                      "backs the draft declaration; no adopted text "
-                      "had been published."},
-        ],
-        "lines": [
-            (5, "Xi pledges $20m for APEC cooperation and a new "
-                "studies centre"),
-            (6, "Ukraine is off the summit agenda, the White House "
-                "says; Kyiv watches"),
-            (7, "Trump tells APEC the US opposes global regulation "
-                "of AI"),
-            (8, "South Korea's Lee calls for renewed dialogue with "
-                "Pyongyang"),
-            (9, "Rockstar promotes GTA VI in China, where it cannot "
-                "yet sell it"),
-            (10, "Putin: all three powers share an interest in "
-                 "ending the Ukraine war"),
-        ],
-    },
-    {
-        "name": "EUROPE", "count": 3, "color": NAVY, "mode": "side",
-        "places": "THE HAGUE · CRIMEA · BERLIN",
-        "boxes": [
-            {"n": 11, "img": "illo-icj.png", "tag": "HORIZON",
-             "head": "World Court reads judgment on Myanmar",
-             "brief": "The ICJ delivers judgment in The Gambia's "
-                      "genocide case over the 2017 crackdown that "
-                      "drove out 730,000 Rohingya. Myanmar denies "
-                      "it."},
-            {"n": 12, "img": "illo-kerch.png", "tag": "ONE TURN",
-             "head": "Ukraine hits Crimean Bridge a third time",
-             "brief": "Traffic is suspended after a third strike "
-                      "in a week on the bridge between Russia and "
-                      "Crimea."},
-            {"n": 13, "img": "illo-europe.png",
-             "tag": "NEWS MEDIA HOUSE",
-             "head": "Europe gathers to arm Ukraine's future",
-             "brief": "Leaders gather in Berlin to define Ukraine's "
-                      "defence future, as the Commission proposes "
-                      "a €45bn loan for Kyiv."},
-        ],
-        "lines": [],
-    },
-    {
-        "name": "AMERICAS", "count": 8, "color": PLUM, "mode": "side",
-        "places": "NEW YORK · FLORIDA",
-        "boxes": [
-            {"n": 14, "img": "illo-gta.png", "tag": "REUTERS · LE MONDE",
-             "head": "GTA VI arrives after a 13-year wait",
-             "brief": "Midnight launch, NZ first; PS5 and Xbox "
-                      "only. Reviews: 99/100; 15.9m pre-orders."},
-            {"n": 15, "img": "illo-anthropic.png", "tag": "REUTERS",
-             "head": "Anthropic debuts in the biggest IPO ever",
-             "brief": "Priced at $83, it raised $81.3bn — the "
-                      "largest IPO ever — and a near-$1.5tn value."},
-            {"n": 16, "img": "illo-vangogh.png", "tag": "REUTERS",
-             "head": "Van Gogh sells for a record $190.4m",
-             "brief": "Châtaigniers en Fleurs (1890), unseen for "
-                      "50 years, broke the artist's record."},
-            {"n": 17, "img": "illo-florida.png", "tag": "CNN · AP",
-             "head": "Flooded Florida braces for more rain",
-             "brief": "15.3in of rain near Plantation; 300-plus "
-                      "calls in one Hollywood night. Schools shut."},
-        ],
-        "lines": [
-            (18, "The US and Venezuela sign a military cooperation "
-                 "agreement"),
-            (19, "NASA sets coverage for Northrop Grumman's CRS-25 "
-                 "launch"),
-            (20, "OpenAI is expected to hold its own IPO next year"),
-            (21, "Art records also fall for Cassatt ($13.3m) and "
-                 "Douglas ($14.5m)"),
-        ],
-    },
-    {
-        "name": "MIDDLE EAST", "count": 7, "color": TEAL, "mode": "side",
-        "places": "ANTALYA · KUWAIT · GAZA",
-        "boxes": [
-            {"n": 22, "img": "illo-cop31.png", "tag": "HORIZON",
-             "head": "COP31 enters its final 48 hours",
-             "brief": "Ministers take over the text in Antalya, "
-                      "but the $120bn adaptation package is still "
-                      "open as talks near their end."},
-            {"n": 23, "img": "illo-gulf.png", "tag": "HORIZON",
-             "head": "Kuwait repels first Iranian attack in "
-                     "two months",
-             "brief": "Kuwait fought off its first Iranian attack "
-                      "in two months; the IEA calls Hormuz its "
-                      "greatest energy threat ever."},
-            {"n": 24, "img": "illo-gaza.png", "tag": "ONE TURN",
-             "head": "Israel pushes beyond the Yellow Line",
-             "brief": "Israeli forces launch a ground operation "
-                      "beyond the Yellow Line in central Gaza, the "
-                      "line the ceasefire drew."},
-        ],
-        "lines": [
-            (25, "Netanyahu presses Trump to strike Iran's nuclear "
-                 "and energy sites"),
-            (26, "A Riyadh tower is damaged by debris from an "
-                 "intercepted Houthi rocket"),
-            (27, "Trump says Iran is exploring chemical and "
-                 "biological weapons"),
-            (28, "Israel delays E1 settlement; a settler kills a "
-                 "woman near Jericho"),
-        ],
-    },
+# A card is a dict: n (its number in reading order), img,
+# color (its region's), kicker (region - place), tag (its
+# sources), head, brief. The lead row runs three of them
+# wide; the card rows run four.
+LEAD_CARDS = [
+    {"n": 1, "img": "hero-apec.png", "color": RED,
+     "kicker": "ASIA · THE SUMMIT", "tag": "USA TODAY · CBS NEWS",
+     "head": "Trump, Xi and Putin hold first three-way summit",
+     "brief": "The leaders of the United States, China and "
+              "Russia sat down in Shenzhen for an hour of "
+              "talks spanning Ukraine, Iran, nuclear arms, "
+              "trade and AI. No breakthrough was announced."},
+    {"n": 2, "img": "illo-gta.png", "color": PLUM,
+     "kicker": "AMERICAS · GAMES", "tag": "REUTERS · LE MONDE",
+     "head": "GTA VI arrives after a 13-year wait",
+     "brief": "Midnight launch, New Zealand first; PS5 and "
+              "Xbox only. Reviews: 99/100, tying the all-time "
+              "record; 15.9m pre-orders."},
+    {"n": 3, "img": "illo-anthropic.png", "color": PLUM,
+     "kicker": "AMERICAS · MARKETS", "tag": "REUTERS",
+     "head": "Anthropic debuts in the biggest IPO ever",
+     "brief": "Priced at $83, it raised $81.3bn — the largest "
+              "IPO ever — and a near-$1.5tn valuation. First "
+              "trades open on Nasdaq as ANT."},
 ]
 
-# The three small bands stacked beside the map.
-SMALL_REGIONS = [
-    {"name": "AFRICA", "count": 1, "color": GOLD,
-     "lines": [(29, "Ethiopia and Eritrea mass their forces along "
-                    "the border")]},
-    {"name": "OCEANIA", "count": 1, "color": GREEN,
-     "lines": [(30, "Vanuatu urges reform of the climate talks "
-                    "themselves")]},
-    {"name": "GLOBAL", "count": 4, "color": GRAY,
-     "lines": [
-         (31, "Datacentres face a 70% rise in emissions by 2030, "
-              "says the IEA"),
-         (32, "A record 589 million children now live in conflict "
-              "zones"),
-         (33, "IMF chief Georgieva warns world inflation has hit "
-              "4.7%"),
-         (34, "Some companies give staff the day off to play "
-              "GTA VI"),
-     ]},
+ROW_CARDS = [
+    {"n": 4, "img": "illo-icj.png", "color": NAVY,
+     "kicker": "EUROPE · THE HAGUE", "tag": "HORIZON",
+     "head": "World Court reads judgment on Myanmar",
+     "brief": "The ICJ delivers judgment in The Gambia's "
+              "genocide case over the 2017 crackdown that "
+              "drove out 730,000 Rohingya. Myanmar denies it."},
+    {"n": 5, "img": "illo-kerch.png", "color": NAVY,
+     "kicker": "EUROPE · CRIMEA", "tag": "ONE TURN",
+     "head": "Ukraine hits Crimean Bridge a third time",
+     "brief": "Traffic is suspended after a third strike in "
+              "a week on the bridge between Russia and Crimea."},
+    {"n": 6, "img": "illo-europe.png", "color": NAVY,
+     "kicker": "EUROPE · BERLIN", "tag": "NEWS MEDIA HOUSE",
+     "head": "Europe gathers to arm Ukraine's future",
+     "brief": "Leaders gather in Berlin to define Ukraine's "
+              "defence future, as the Commission proposes "
+              "a €45bn loan for Kyiv."},
+    {"n": 7, "img": "illo-vangogh.png", "color": PLUM,
+     "kicker": "AMERICAS · NEW YORK", "tag": "REUTERS",
+     "head": "Van Gogh sells for a record $190.4m",
+     "brief": "Châtaigniers en Fleurs (1890), unseen for "
+              "50 years, broke the artist's record."},
+    {"n": 8, "img": "illo-florida.png", "color": PLUM,
+     "kicker": "AMERICAS · FLORIDA", "tag": "CNN · AP",
+     "head": "Flooded Florida braces for more rain",
+     "brief": "15.3in of rain near Plantation; 300-plus "
+              "calls in one Hollywood night. Schools shut."},
+    {"n": 9, "img": "illo-cop31.png", "color": TEAL,
+     "kicker": "MIDDLE EAST · ANTALYA", "tag": "HORIZON",
+     "head": "COP31 enters its final 48 hours",
+     "brief": "Ministers take over the text in Antalya, "
+              "but the $120bn adaptation package is still "
+              "open as talks near their end."},
+    {"n": 10, "img": "illo-gulf.png", "color": TEAL,
+     "kicker": "MIDDLE EAST · KUWAIT", "tag": "HORIZON",
+     "head": "Kuwait repels first Iranian attack in two months",
+     "brief": "Kuwait fought off its first Iranian attack "
+              "in two months; the IEA calls Hormuz its "
+              "greatest energy threat ever."},
+    {"n": 11, "img": "illo-gaza.png", "color": TEAL,
+     "kicker": "MIDDLE EAST · GAZA", "tag": "ONE TURN",
+     "head": "Israel pushes beyond the Yellow Line",
+     "brief": "Israeli forces launch a ground operation "
+              "beyond the Yellow Line in central Gaza, the "
+              "line the ceasefire drew."},
+]
+
+# The ALSO one-liners: (number, bold lead, rest, region
+# colour). Wire-style and terse, as the winning pages write
+# them, so each fits one line at full one-liner size; every
+# fact is the verified story's own (SOURCES.md).
+BRIEFS = [
+    (12, "Shenzhen:", "APEC summit week ends", RED),
+    (13, "Bangladesh:", "turmoil hits 28 districts", RED),
+    (14, "N. Korea:", "uranium enrichment rises", RED),
+    (15, "Xi:", "$20m for APEC cooperation", RED),
+    (16, "Ukraine:", "kept off the summit agenda", RED),
+    (17, "Trump:", "US opposes global AI rules", RED),
+    (18, "Seoul:", "Lee seeks Pyongyang dialogue", RED),
+    (19, "Rockstar:", "markets GTA VI in China", RED),
+    (20, "Putin:", "powers share aim to end war", RED),
+    (21, "Caracas:", "US–Venezuela military deal", PLUM),
+    (22, "NASA:", "sets CRS-25 launch coverage", PLUM),
+    (23, "OpenAI:", "IPO expected next year", PLUM),
+    (24, "New York:", "Cassatt, Douglas records", PLUM),
+    (25, "Netanyahu:", "urges strikes on Iran", TEAL),
+    (26, "Riyadh:", "tower hit by rocket debris", TEAL),
+    (27, "Iran:", "chemical arms alleged by Trump", TEAL),
+    (28, "Jericho:", "E1 delayed, settler killing", TEAL),
+    (29, "Ethiopia:", "both sides mass forces", GOLD),
+    (30, "Vanuatu:", "reform the climate talks", GREEN),
+    (31, "Datacentres:", "face 70% emissions rise", GRAY),
+    (32, "Record:", "589m children in war zones", GRAY),
+    (33, "Georgieva:", "inflation has hit 4.7%", GRAY),
+    (34, "GTA VI:", "firms give staff the day off", GRAY),
 ]
 
 DATE_CHECK = (
@@ -439,9 +377,9 @@ def make_wide(path, w, h, cx_frac):
     return im.resize((w, h), Image.LANCZOS)
 
 
-def centered(draw, y, text, f, fill):
+def centered(draw, y, text, f, fill, cx=PAGE / 2):
     w = draw.textlength(text, font=f)
-    draw.text(((PAGE - w) / 2, y), text, font=f, fill=fill)
+    draw.text((cx - w / 2, y), text, font=f, fill=fill)
 
 
 # ------------------------------------------------------------- the map
@@ -505,25 +443,38 @@ MAP_ROWS = [
 for _row in MAP_ROWS:
     assert len(_row) == 100, f"map row is {len(_row)} cells wide"
 
-# (label, longitude, latitude, colour, dx, dy) - the nudges keep
-# the dense European and Gulf clusters from sitting on each other.
+# (label, longitude, latitude, colour, dx, dy) - the eleven
+# drawn stories pinned by number; the nudges keep the dense
+# European and Gulf clusters from sitting on each other. The
+# New York pill carries the three drawn stories that belong
+# to the city: the GTA VI launch's publisher, the Anthropic
+# listing on Nasdaq and the Van Gogh sale at Sotheby's.
 PINS = [
     ("1", 114.1, 22.5, RED, 0, 0),          # Shenzhen - the summit
-    ("2", 90.4, 23.8, RED, 0, 0),           # Dhaka
-    ("3", 125.8, 39.7, RED, 0, 0),          # Yongbyon
-    ("11", 4.3, 52.1, NAVY, -5, 2),         # The Hague
-    ("13", 13.4, 52.5, NAVY, 10, -3),       # Berlin
-    ("12", 34.1, 44.9, NAVY, 3, -3),        # Crimea
-    ("22", 30.7, 36.9, TEAL, -4, 0),        # Antalya
-    ("24", 34.3, 31.4, TEAL, 6, 7),         # Gaza
-    ("23", 48.0, 29.4, TEAL, 3, 1),         # Kuwait
-    ("14·15·16", -74.0, 40.7, PLUM, 0, 0),  # New York x3
-    ("17", -81.7, 27.8, PLUM, -2, 2),       # Florida
+    ("4", 4.3, 52.1, NAVY, -5, 2),          # The Hague
+    ("6", 13.4, 52.5, NAVY, 10, -3),        # Berlin
+    ("5", 34.1, 44.9, NAVY, 3, -3),         # Crimea
+    ("9", 30.7, 36.9, TEAL, -4, 0),         # Antalya
+    ("11", 34.3, 31.4, TEAL, 6, 7),         # Gaza
+    ("10", 48.0, 29.4, TEAL, 3, 1),         # Kuwait
+    ("2·3·7", -74.0, 40.7, PLUM, 0, 0),     # New York x3
+    ("8", -81.7, 27.8, PLUM, -2, 2),        # Florida
+]
+
+# Small unnumbered dots for briefs with a clear place:
+# (longitude, latitude, colour).
+BRIEF_DOTS = [
+    (90.4, 23.8, RED),      # 13 Dhaka
+    (125.8, 39.7, RED),     # 14 Yongbyon
+    (-66.9, 10.5, PLUM),    # 21 Caracas
+    (40.0, 9.0, GOLD),      # 29 Ethiopia-Eritrea border
+    (167.0, -16.0, GREEN),  # 30 Vanuatu
 ]
 
 
 def draw_map(page, draw, x, y, w, h):
-    """The dot world with the main stories pinned by number."""
+    """The dot world with the drawn stories pinned by number
+    and small dots for the briefs that have a clear place."""
     cols, rows = 100, 25
     cw, chh = w / cols, h / rows
     for r, row in enumerate(MAP_ROWS):
@@ -533,6 +484,11 @@ def draw_map(page, draw, x, y, w, h):
                 cy = y + (r + 0.5) * chh
                 draw.ellipse([cx - 1.3, cy - 1.3, cx + 1.3, cy + 1.3],
                              fill=MAPDOT)
+    for lon, lat, colour in BRIEF_DOTS:
+        px = x + (lon + 180) / 360 * w
+        py = y + (85 - lat) / 125 * h
+        draw.ellipse([px - 2.6, py - 2.6, px + 2.6, py + 2.6],
+                     fill=colour)
     f_pin = F(SANS_BOLD, 8)
     for label, lon, lat, colour, dx, dy in PINS:
         px = x + (lon + 180) / 360 * w + dx
@@ -551,308 +507,208 @@ def draw_map(page, draw, x, y, w, h):
             draw.text((px - tw / 2, py - 4.5), label,
                       font=f_pin, fill=WHITE)
 
-
 # ------------------------------------------------------------- sections
 
 
 def draw_masthead(draw):
-    draw.rectangle([MARGIN, 8, PAGE - MARGIN, 11], fill=INK)
-    draw.line([MARGIN, 14, PAGE - MARGIN, 14], fill=INK, width=1)
-    f_brand = F(SANS_BOLD, 11)
-    draw_tracked(draw, MARGIN, 18, "THE WORLD IN ONE DAY",
-                 f_brand, INK, 3)
-    tag = "ONE PAGE · 34 STORIES · 7 REGIONS"
-    tw = tracked_w(draw, tag, f_brand, 3)
-    draw_tracked(draw, PAGE - MARGIN - tw, 18, tag, f_brand, INK, 3)
-    title = "Thursday 19 November 2026"
-    f_title = shrink_to_fit(draw, title, SERIF_BLACK, CONTENT_W, 29)
-    centered(draw, 30, title, f_title, INK)
-    f_deck = shrink_to_fit(draw, DECK, SERIF_IT, CONTENT_W, 12)
-    centered(draw, 63, DECK, f_deck, FADED)
-    draw.line([MARGIN, 77, PAGE - MARGIN, 77], fill=INK, width=1)
-    draw.rectangle([MARGIN, 80, PAGE - MARGIN, 82], fill=INK)
-    return 84
+    """The navy band: date badge at the left, the paper's name
+    and the huge date centred, the counts at the top right."""
+    draw.rectangle([0, 0, PAGE, MASTHEAD_H], fill=NAVY)
+    bx, by, bw, bh = MARGIN, 10, 74, 76
+    draw.rectangle([bx, by, bx + bw, by + bh], fill=WHITE)
+    draw.rectangle([bx, by, bx + bw, by + 19], fill=RED)
+    centered(draw, by + 3, "NOV", F(SANS_BOLD, 12), WHITE,
+             cx=bx + bw / 2)
+    centered(draw, by + 21, "19", F(SERIF_BLACK, 34), NAVY,
+             cx=bx + bw / 2)
+    centered(draw, by + 61, "THU · 2026", F(SANS_BOLD, 9), RED,
+             cx=bx + bw / 2)
+    f_counts = F(SANS_BOLD, 9.5)
+    cw_ = tracked_w(draw, COUNTS_LINE, f_counts, 1)
+    draw_tracked(draw, PAGE - MARGIN - cw_, 12, COUNTS_LINE,
+                 f_counts, WHITE, 1)
+    name = "THE WORLD IN ONE DAY"
+    f_name = F(SANS_BOLD, 11)
+    nw = tracked_w(draw, name, f_name, 3)
+    draw_tracked(draw, (PAGE - nw) / 2, 11, name, f_name, WHITE, 3)
+    date = "Thursday 19 November 2026"
+    f_date = shrink_to_fit(draw, date, SERIF_BLACK, 720, 41)
+    centered(draw, 20, date, f_date, WHITE)
+    centered(draw, 74, STANDFAST, F(SERIF_IT, 12), NAVY_TXT)
+    return MASTHEAD_H
+
+
+def draw_rainbow(draw, y):
+    """One band of seven coloured segments, one per region,
+    each carrying its story count; segment widths grow with
+    the counts, over a minimum that fits the label."""
+    f_seg = F(SANS_BOLD, 10)
+    labels = [f"{name} {count}" for name, count, _ in REGION_BAND]
+    mins = [draw.textlength(t, font=f_seg) + 18 for t in labels]
+    extra = PAGE - sum(mins)
+    total = sum(c for _, c, _ in REGION_BAND)
+    x = 0.0
+    for (name, count, color), lab, mn in zip(REGION_BAND, labels,
+                                             mins):
+        w = mn + extra * count / total
+        draw.rectangle([x, y, x + w, y + RAINBOW_H], fill=color)
+        tw = draw.textlength(lab, font=f_seg)
+        draw.text((x + (w - tw) / 2, y + 3), lab, font=f_seg,
+                  fill=WHITE)
+        x += w
+    return y + RAINBOW_H
 
 
 def draw_timeline(draw, y):
-    f_lab = F(SANS_BOLD, 8)
-    draw_tracked(draw, MARGIN, y + 1, "THE DAY IN UTC", f_lab,
-                 INK, 1)
-    axis_y = y + 13
-    draw.line([MARGIN, axis_y, PAGE - MARGIN, axis_y],
-              fill=HAIRLINE, width=1)
-    f_hour = F(SANS, 6.5)
-    for hour in (0, 4, 8, 12, 16, 20, 24):
-        hx = MARGIN + hour / 24 * CONTENT_W
-        draw.line([hx, axis_y - 2, hx, axis_y + 2], fill=FADED,
-                  width=1)
-        label = f"{hour:02d}"
-        lw = draw.textlength(label, font=f_hour)
-        draw.text((hx - lw / 2, axis_y + 3), label, font=f_hour,
-                  fill=FADED)
-    f_mom = F(SANS_BOLD, 8.5)
-    slots = (0.22, 0.44, 0.66, 0.88)
-    for (time, text, hour), frac in zip(TIMELINE, slots):
-        dot_x = MARGIN + hour / 24 * CONTENT_W
-        slot_x = MARGIN + frac * CONTENT_W
-        draw.line([slot_x, y + 9, dot_x, axis_y - 3],
-                  fill=HAIRLINE, width=1)
-        draw.ellipse([dot_x - 2.5, axis_y - 2.5, dot_x + 2.5,
-                      axis_y + 2.5], fill=RED)
-        label = f"{time} · {text}"
-        lw = draw.textlength(label, font=f_mom)
-        draw.text((slot_x - lw / 2, y), label, font=f_mom, fill=INK)
-    return y + 22
-
-
-def draw_lead(page, draw, y):
-    hero = make_thumb(os.path.join(ASSETS, LEAD["image"]), HERO_W,
-                      HERO_H, crop=hero_window(HERO_W, HERO_H))
-    page.paste(hero, (MARGIN, y))
-    draw.rectangle([MARGIN, y, MARGIN + HERO_W, y + HERO_H],
-                   outline=INK, width=1)
-    draw.text((MARGIN, y + HERO_H + 2), LEAD["credit"],
-              font=F(SERIF_IT, 8.5), fill=FADED)
-    tx = MARGIN + HERO_W + 16
-    tw = PAGE - MARGIN - tx
-    draw_tracked(draw, tx, y + 1, LEAD["kicker"], F(SANS_BOLD, 11),
-                 RED, 2)
-    f_head = F(SERIF_BOLD, 24)
-    head = wrap_lines(draw, LEAD["headline"], f_head, tw)
-    assert len(head) <= 3, "lead headline overflow"
-    hy = y + 18
-    for ln in head:
-        draw.text((tx, hy), ln, font=f_head, fill=INK)
-        hy += 27
-    draw.line([tx, hy + 2, PAGE - MARGIN, hy + 2], fill=HAIRLINE,
-              width=1)
-    f_sum = F(SANS, 11)
-    body = wrap_lines(draw, LEAD["summary"], f_sum, tw)
-    assert len(body) <= 6, "lead summary overflow"
-    sy = hy + 8
-    for ln in body:
-        draw.text((tx, sy), ln, font=f_sum, fill=INK)
-        sy += 12
-    return int(round(max(y + HERO_H + 12, sy)))
-
-
-def draw_band(draw, y, name, count, color, places=None):
-    draw.rectangle([MARGIN, y, PAGE - MARGIN, y + 14], fill=color)
-    label = f"{name} — {count} " + ("STORY" if count == 1
-                                    else "STORIES")
-    draw_tracked(draw, MARGIN + 8, y + 2, label, F(SANS_BOLD, 9.5),
-                 WHITE, 1)
-    if places:
-        f_pl = F(SANS_BOLD, 8)
-        pw = tracked_w(draw, places, f_pl, 1)
-        draw_tracked(draw, PAGE - MARGIN - 8 - pw, y + 3, places,
-                     f_pl, WHITE, 1)
-    return y + 14
-
-
-def draw_card_top(page, draw, x, y, w, box, color, art_h):
-    """One numbered story card with its artwork on top; returns
-    its height. The panorama is shown at the card's full width
-    on its focal window (FOCAL), so the picture reads complete;
-    the story's number and source tag, its headline and its
-    brief run under the art. A card with no artwork gets a
-    coloured rule and the same text stack instead."""
-    f_num = F(SANS_BOLD, 13)
-    f_tag = F(SANS_BOLD, 7)
-    f_head = F(SERIF_BOLD, 13)
-    f_brief = F(SANS, 9.5)
-    if box["img"]:
-        art = make_wide(os.path.join(ASSETS, box["img"]), w, art_h,
-                        FOCAL[box["img"]])
-        page.paste(art, (x, y))
-        draw.rectangle([x, y, x + w, y + art_h],
+    """THE DAY IN UTC: a red label box and four moment boxes,
+    each with its time in red over its label."""
+    draw.rectangle([MARGIN, y, MARGIN + 92, y + TIMELINE_H],
+                   fill=RED)
+    centered(draw, y + 5, "THE DAY", F(SANS_BOLD, 10.5), WHITE,
+             cx=MARGIN + 46)
+    centered(draw, y + 19, "IN UTC", F(SANS_BOLD, 10.5), WHITE,
+             cx=MARGIN + 46)
+    bx = MARGIN + 92 + 6
+    bw = (PAGE - MARGIN - bx - 3 * 6) / 4
+    f_time = F(SANS_BOLD, 11.5)
+    f_lab = F(SANS, 9.5)
+    for i, (time, text) in enumerate(TIMELINE):
+        x = bx + i * (bw + 6)
+        draw.rectangle([x, y, x + bw, y + TIMELINE_H], fill=WHITE,
                        outline=HAIRLINE, width=1)
-        ty = y + art_h + 3
+        draw.text((x + 8, y + 4), time, font=f_time, fill=RED)
+        draw.text((x + 8, y + 21), text, font=f_lab, fill=INK)
+    return y + TIMELINE_H
+
+
+def draw_card(page, draw, x, y, w, card, art_h, head_size,
+              head_lh, brief_size, brief_lh):
+    """One numbered story card with its artwork on top at
+    about 2:1; returns its height. The artwork is shown whole
+    on its focal window (the hero on its HERO_CROP); the
+    story's number and region kicker, its headline and its
+    brief run under the art, with the source tag at the
+    right of the kicker line."""
+    if card["img"] == "hero-apec.png":
+        art = make_thumb(os.path.join(ASSETS, card["img"]), w,
+                         art_h, crop=HERO_CROP)
     else:
-        draw.rectangle([x, y, x + w, y + 3], fill=color)
-        ty = y + 7
-    draw.text((x, ty), str(box["n"]), font=f_num, fill=color)
-    tag = box["tag"]
-    tagw = tracked_w(draw, tag, f_tag, 1)
-    draw_tracked(draw, x + w - tagw, ty + 3, tag, f_tag, FADED, 1)
-    head = wrap_lines(draw, box["head"], f_head, w)
-    assert len(head) <= 2, f"card headline overflow: {box['head']}"
-    hy = ty + 15
-    for ln in head:
-        draw.text((x, hy), ln, font=f_head, fill=INK)
-        hy += 13.5
-    brief = wrap_lines(draw, box["brief"], f_brief, w)
-    assert len(brief) <= 3, f"card brief overflow: {box['head']}"
-    by = hy + 1
-    for ln in brief:
-        draw.text((x, by), ln, font=f_brief, fill=INK)
-        by += 10
-    return int(round(by - y))
-
-
-def draw_box(page, draw, x, y, w, box, color, art_w, art_h):
-    """One numbered story box with its artwork beside the text;
-    returns its height. The artwork sits at the left in a true
-    rectangle, cropped on its focal window (CROPS) so the
-    picture reads complete; the story's number and source tag,
-    its headline and its brief run in a text column beside the
-    art. A box with no artwork gets a coloured rule and the
-    full width for its text instead."""
+        art = make_wide(os.path.join(ASSETS, card["img"]), w,
+                        art_h, FOCAL[card["img"]])
+    page.paste(art, (x, y))
+    draw.rectangle([x, y, x + w, y + art_h], outline=HAIRLINE,
+                   width=1)
+    ty = y + art_h + 5
     f_num = F(SANS_BOLD, 13)
-    f_tag = F(SANS_BOLD, 7)
-    f_head = F(SERIF_BOLD, 13)
-    f_brief = F(SANS, 9.5)
-    if box["img"]:
-        art = make_thumb(os.path.join(ASSETS, box["img"]), art_w,
-                         art_h, crop=CROPS[box["img"]])
-        page.paste(art, (x, y))
-        draw.rectangle([x, y, x + art_w, y + art_h],
-                       outline=HAIRLINE, width=1)
-        tx = x + art_w + 8
-        tw = x + w - tx
-        draw.text((tx, y), str(box["n"]), font=f_num, fill=color)
-        tag = box["tag"]
-        tagw = tracked_w(draw, tag, f_tag, 1)
-        draw_tracked(draw, x + w - tagw, y + 3, tag, f_tag,
-                     FADED, 1)
-        head = wrap_lines(draw, box["head"], f_head, tw)
-        assert len(head) <= 3, \
-            f"box headline overflow: {box['head']}"
-        hy = y + 15
-        for ln in head:
-            draw.text((tx, hy), ln, font=f_head, fill=INK)
-            hy += 13.5
-        brief = wrap_lines(draw, box["brief"], f_brief, tw)
-        assert len(brief) <= 7, \
-            f"box brief overflow: {box['head']}"
-        by = hy + 1
-        for ln in brief:
-            draw.text((tx, by), ln, font=f_brief, fill=INK)
-            by += 10
-        return int(round(max(art_h, by - y)))
-    draw.rectangle([x, y, x + w, y + 3], fill=color)
-    ty = y + 7
-    draw.text((x, ty), str(box["n"]), font=f_num, fill=color)
-    tag = box["tag"]
-    tagw = tracked_w(draw, tag, f_tag, 1)
-    draw_tracked(draw, x + w - tagw, ty + 3, tag, f_tag, FADED, 1)
-    head = wrap_lines(draw, box["head"], f_head, w)
-    assert len(head) <= 2, f"box headline overflow: {box['head']}"
-    hy = ty + 15
+    draw.text((x, ty), str(card["n"]), font=f_num,
+              fill=card["color"])
+    nw = draw.textlength(str(card["n"]) + " ", font=f_num)
+    draw_tracked(draw, x + nw + 2, ty + 3, card["kicker"],
+                 F(SANS_BOLD, 8.5), card["color"], 1)
+    f_tag = F(SANS_BOLD, 7.5)
+    tagw = tracked_w(draw, card["tag"], f_tag, 1)
+    draw_tracked(draw, x + w - tagw, ty + 3, card["tag"], f_tag,
+                 FADED, 1)
+    f_head = F(SERIF_BOLD, head_size)
+    head = wrap_lines(draw, card["head"], f_head, w)
+    assert len(head) <= 2, f"card headline overflow: {card['head']}"
+    hy = ty + 16
     for ln in head:
         draw.text((x, hy), ln, font=f_head, fill=INK)
-        hy += 13.5
-    brief = wrap_lines(draw, box["brief"], f_brief, w)
-    assert len(brief) <= 3, f"box brief overflow: {box['head']}"
-    by = hy + 1
+        hy += head_lh
+    f_brief = F(SANS, brief_size)
+    brief = wrap_lines(draw, card["brief"], f_brief, w)
+    assert len(brief) <= 3, f"card brief overflow: {card['head']}"
+    by = hy + 2
     for ln in brief:
         draw.text((x, by), ln, font=f_brief, fill=INK)
-        by += 10
+        by += brief_lh
     return int(round(by - y))
 
 
-def draw_lines(draw, x, y, w, lines, color, cols, fsize=11.5,
-               lh=14.0):
-    """Numbered one-line stories in columns; returns the bottom."""
-    f_item = F(SANS, fsize)
-    f_no = F(SANS_BOLD, fsize)
-    gap = 16
-    col_w = (w - (cols - 1) * gap) // cols
-    per_col = (len(lines) + cols - 1) // cols
-    bottom = y
-    for j, (num, text) in enumerate(lines):
-        cx = x + (j // per_col) * (col_w + gap)
-        cy = y + (j % per_col) * lh
-        label = f"{num}."
-        draw.text((cx, cy), label, font=f_no, fill=color)
-        nw = draw.textlength(label + " ", font=f_no)
-        one = wrap_lines(draw, text, f_item, col_w - nw)
-        assert len(one) == 1, f"one-liner wraps: {text}"
-        draw.text((cx + nw, cy), one[0], font=f_item, fill=INK)
-        bottom = max(bottom, cy + lh)
-    return int(round(bottom))
-
-
-def draw_region(page, draw, y, region):
-    y = draw_band(draw, y, region["name"], region["count"],
-                  region["color"], region["places"]) + 1
-    boxes = region["boxes"]
-    n = len(boxes)
-    gap = 11 if n == 3 else 12
+def draw_card_row(page, draw, y, cards, art_h, head_size, head_lh,
+                  brief_size, brief_lh):
+    """A row of cards across the content width; returns the
+    row's bottom."""
+    n = len(cards)
+    gap = 11 if n == 3 else 10
     bw = (CONTENT_W - (n - 1) * gap) // n
-    row_h = 0
-    for i, box in enumerate(boxes):
-        bx = MARGIN + i * (bw + gap)
-        if region["mode"] == "top":
-            art_h = ART_H if n == 3 else ART4_H
-            h = draw_card_top(page, draw, bx, y, bw, box,
-                              region["color"], art_h)
-        else:
-            art_w = 150 if n == 3 else 100
-            h = draw_box(page, draw, bx, y, bw, box,
-                         region["color"], art_w, SIDE_H)
-        row_h = max(row_h, h)
-    y += row_h
-    if region["lines"]:
-        y += 3
-        y = draw_lines(draw, MARGIN, y, CONTENT_W, region["lines"],
-                       region["color"], 2, lh=11.3)
-    return y
+    h = 0
+    for i, card in enumerate(cards):
+        h = max(h, draw_card(page, draw, MARGIN + i * (bw + gap),
+                             y, bw, card, art_h, head_size,
+                             head_lh, brief_size, brief_lh))
+    return y + h
 
 
 def draw_bottom(page, draw, y):
-    map_w = 470
-    draw_tracked(draw, MARGIN, y, "WHERE IT HAPPENED",
-                 F(SANS_BOLD, 10), INK, 2)
-    cap = "the 13 main stories, pinned"
-    f_cap = F(SERIF_IT, 9)
-    cw = draw.textlength(cap, font=f_cap)
-    draw.text((MARGIN + map_w - cw, y + 1), cap, font=f_cap,
+    """WHERE IT HAPPENED at the left - the dot-matrix map,
+    its pins and the region legend - and ALSO ON THURSDAY 19
+    NOVEMBER at the right: the 23 briefs as numbered
+    one-liners in three columns, each opening with a bold
+    lead word. Returns the zone's bottom."""
+    f_head = F(SANS_BOLD, 10.5)
+    draw_tracked(draw, MARGIN, y, "WHERE IT HAPPENED", f_head,
+                 INK, 2)
+    ax = MARGIN + MAP_W + 16
+    draw_tracked(draw, ax, y, "ALSO ON THURSDAY 19 NOVEMBER",
+                 f_head, INK, 2)
+    top = y + 15
+    draw_map(page, draw, MARGIN, top, MAP_W, MAP_H)
+    legend = ("ASIA 10 · EUROPE 3 · AMERICAS 8 · MID EAST 7 · "
+              "AFRICA 1 · OCEANIA 1 · GLOBAL 4")
+    draw.text((MARGIN, top + MAP_H + 4), legend, font=F(SANS, 7.5),
               fill=FADED)
-    draw_map(page, draw, MARGIN, y + 14, map_w, MAP_H)
-    left_bottom = y + 14 + MAP_H
-    sx = MARGIN + map_w + 16
-    sw = PAGE - MARGIN - sx
-    sy = y
-    for region in SMALL_REGIONS:
-        draw.rectangle([sx, sy, sx + sw, sy + 10],
-                       fill=region["color"])
-        label = (f"{region['name']} — {region['count']} "
-                 + ("STORY" if region["count"] == 1 else "STORIES"))
-        draw_tracked(draw, sx + 7, sy + 1, label, F(SANS_BOLD, 8.5),
-                     WHITE, 1)
-        sy += 10 + 2
-        sy = draw_lines(draw, sx, sy, sw, region["lines"],
-                        region["color"], 1, fsize=11, lh=10.5) - 2
-        sy += 2
-    return int(round(max(left_bottom, sy - 4)))
+    left_bottom = top + MAP_H + 14
+    aw = PAGE - MARGIN - ax
+    cols, gap = 3, 12
+    col_w = (aw - (cols - 1) * gap) // cols
+    per_col = (len(BRIEFS) + cols - 1) // cols
+    f_no = F(SANS_BOLD, 11)
+    f_lead = F(SANS_BOLD, 11)
+    f_rest = F(SANS, 11)
+    bottom = top
+    for j, (num, lead, rest, color) in enumerate(BRIEFS):
+        cx = ax + (j // per_col) * (col_w + gap)
+        cy = top + (j % per_col) * 14
+        label = f"{num}."
+        draw.text((cx, cy), label, font=f_no, fill=color)
+        nw = draw.textlength(label + " ", font=f_no)
+        draw.text((cx + nw, cy), lead, font=f_lead, fill=INK)
+        lw = draw.textlength(lead + " ", font=f_lead)
+        one = wrap_lines(draw, rest, f_rest, col_w - nw - lw)
+        assert len(one) == 1, f"ALSO line wraps: {lead} {rest}"
+        draw.text((cx + nw + lw, cy), one[0], font=f_rest, fill=INK)
+        bottom = max(bottom, cy + 14)
+    return int(round(max(left_bottom, bottom)))
 
 
 def draw_footer(draw, y):
-    draw.rectangle([MARGIN, y, PAGE - MARGIN, y + 19], outline=RED,
+    draw.rectangle([MARGIN, y, PAGE - MARGIN, y + 24], outline=RED,
                    width=2)
     f_dc = shrink_to_fit(draw, DATE_CHECK, SANS_BOLD,
                          CONTENT_W - 20, 10)
-    centered(draw, y + 2, DATE_CHECK, f_dc, RED)
+    centered(draw, y + 3, DATE_CHECK, f_dc, RED)
     f_src = shrink_to_fit(draw, SOURCES_LINE, SANS, CONTENT_W - 20,
                           8.5)
-    centered(draw, y + 11, SOURCES_LINE, f_src, FADED)
-    return y + 19
+    centered(draw, y + 13, SOURCES_LINE, f_src, FADED)
+    return y + 24
 
 
 def build_page():
     page = Image.new("RGB", (PAGE, PAGE), PAPER)
     draw = ImageDraw.Draw(page)
     y = draw_masthead(draw)
-    y = draw_timeline(draw, y + 2) + 2
-    y = draw_lead(page, draw, y)
-    for region in REGIONS:
-        y += 2
-        y = draw_region(page, draw, y, region)
-    y += 2
-    y = draw_bottom(page, draw, y)
-    y += 2
-    y = draw_footer(draw, y)
+    y = draw_rainbow(draw, y)
+    y = draw_timeline(draw, y + 6) + 6
+    y = draw_card_row(page, draw, y, LEAD_CARDS, LEAD_ART_H, 24,
+                      26, 10, 12.5)
+    y = draw_card_row(page, draw, y + 8, ROW_CARDS[:4], CARD_ART_H,
+                      15, 17, 9.5, 11.5)
+    y = draw_card_row(page, draw, y + 8, ROW_CARDS[4:],
+                      CARD_ART_H, 15, 17, 9.5, 11.5)
+    y = draw_bottom(page, draw, y + 8)
+    y = draw_footer(draw, y + 6)
     assert y <= PAGE - 2, f"page overflow: content ends at {y}"
     return page
 

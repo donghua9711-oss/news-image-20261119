@@ -6,12 +6,14 @@
 
 One image that sums up the world news of Thursday 19 November 2026:
 a one-page newspaper, "The World in One Day", holding 34 stories.
-The front page leads with the first three-way summit of Donald
-Trump, Xi Jinping and Vladimir Putin in Shenzhen, under a timeline
-of the day in UTC. The stories sit under regional colour bands —
-Asia, Europe, Americas, Middle East, Africa, Oceania and Global —
-as numbered boxes with illustrations and one-line stories, beside
-a world map pinning the 13 main stories. The day's headline
+The page is built on the structure of the edition's winning
+pages: a navy masthead over a rainbow region band (Asia, Europe,
+Americas, Middle East, Africa, Oceania and Global, with their
+story counts), a timeline of the day in UTC, three lead cards —
+the first three-way summit of Donald Trump, Xi Jinping and
+Vladimir Putin in Shenzhen first — two rows of four illustrated
+cards, a world map pinning the eleven drawn stories, and the
+remaining 23 stories as one-line briefs. The day's headline
 numbers run through the page: Anthropic's record $81.3bn IPO, GTA
 VI's 15.9 million pre-orders, the 730,000 Rohingya in the ICJ case,
 COP31's unresolved $120bn, 589 million children in conflict zones
